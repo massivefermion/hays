@@ -64,4 +64,12 @@ function findOne(object, key, opts) {
   return null
 }
 
-module.exports = { find, findOne }
+function replace(object, key, func) {
+	return find(object, key, { replace: func })
+}
+
+function replaceOne(object, key, func) {
+	return findOne(object, key, { replace: func })
+}
+
+module.exports = { find, findOne, replace, replaceOne }
