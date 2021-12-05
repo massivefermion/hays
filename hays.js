@@ -8,7 +8,7 @@ function find(object, key, opts) {
 
     if (k == key) {
       const temp = { path: k, data: { value: object[k] } }
-      if (opts) {
+      if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
           temp.data.transformed = opts.transform(object[k])
         }
