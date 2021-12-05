@@ -31,7 +31,18 @@ console.log(hays.find(book, 'firstname'))
 //  { path: 'editor.firstname', data: { value: 'Felicity' } }
 // ]
 
-console.log(hays.replace(book, 'category', b => b.concat('Educational')))
+console.log(hays.find(book, 'title', { transform: s => s.toLowerCase() }))
+// [
+//   {
+//     path: 'title',
+//     data: {
+//       value: 'The Ultimate Database Study Guide',
+//       transformed: 'the ultimate database study guide',
+//     },
+//   }
+// ]
+
+console.log(hays.replace(book, 'category', c => c.concat('Educational')))
 // [
 //   {
 //     path: 'category',
