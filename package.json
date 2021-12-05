@@ -1,5 +1,10 @@
 {
   "name": "hays",
-  "version": "0.1.1",
-  "main":"./hays.js"
+  "version": "0.1.2",
+  "main":"./hays.js",
+  "repository": {
+    "type":"git",
+    "url":"git+https://github.com/massivefermion/hays"
+  },
+  "keywords": ["object","deep","deeply","nested","path","find","excavate","explore","key","field","value"]
 }
