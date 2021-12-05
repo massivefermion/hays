@@ -1,4 +1,5 @@
 {
   "name": "hays",
+  "version": "0.1",
   "main":"./hays.js"
 }
