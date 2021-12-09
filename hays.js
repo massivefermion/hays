@@ -1,4 +1,4 @@
-function find(object, key, opts) {
+async function find(object, key, opts) {
   let result = []
 
   for (const k in object) {
@@ -11,10 +11,14 @@ function find(object, key, opts) {
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
           temp.data.transformed = opts.transform(object[k])
+          if (temp.data.transformed instanceof Promise)
+            temp.data.transformed = await temp.data.transformed
         }
         if (opts.replace && typeof opts.replace == 'function') {
           temp.data.old = object[k]
           object[k] = opts.replace(object[k])
+          if (object[k] instanceof Promise)
+            object[k] = await opts.replace(object[k])
           temp.data.new = object[k]
           delete temp.data.value
         }
@@ -23,7 +27,8 @@ function find(object, key, opts) {
     }
 
     if (object[k] && typeof object[k] == 'object') {
-      const sub = find(object[k], key, opts)
+      let sub = find(object[k], key, opts)
+      if (sub instanceof Promise) sub = await sub
       result = result.concat(
         sub.map(s => ({ path: k + '.' + s.path, data: s.data }))
       )
@@ -33,7 +38,7 @@ function find(object, key, opts) {
   return result
 }
 
-function findOne(object, key, opts) {
+async function findOne(object, key, opts) {
   for (const k in object) {
     if (!object.hasOwnProperty(k)) {
       continue
@@ -44,10 +49,14 @@ function findOne(object, key, opts) {
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
           temp.data.transformed = opts.transform(object[k])
+          if (temp.data.transformed instanceof Promise)
+            temp.data.transformed = await temp.data.transformed
         }
         if (opts.replace && typeof opts.replace == 'function') {
           temp.data.old = object[k]
           object[k] = opts.replace(object[k])
+          if (object[k] instanceof Promise)
+            object[k] = await opts.replace(object[k])
           temp.data.new = object[k]
           delete temp.data.value
         }
@@ -56,7 +65,8 @@ function findOne(object, key, opts) {
     }
 
     if (object[k] && typeof object[k] == 'object') {
-      const sub = findOne(object[k], key, opts)
+      let sub = findOne(object[k], key, opts)
+      if (sub instanceof Promise) sub = await sub
       if (sub) return { path: k + '.' + sub.path, data: sub.data }
     }
   }
@@ -65,11 +75,11 @@ function findOne(object, key, opts) {
 }
 
 function replace(object, key, func) {
-	return find(object, key, { replace: func })
+  return find(object, key, { replace: func })
 }
 
 function replaceOne(object, key, func) {
-	return findOne(object, key, { replace: func })
+  return findOne(object, key, { replace: func })
 }
 
 module.exports = { find, findOne, replace, replaceOne }

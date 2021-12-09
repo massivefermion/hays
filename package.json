@@ -1,6 +1,6 @@
 {
   "name": "hays",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "main":"./hays.js",
   "repository": {
     "type":"git",
