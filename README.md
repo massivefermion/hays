@@ -25,13 +25,21 @@ const book = {
   },
 }
 
-console.log(hays.find(book, 'firstname'))
+hays.find(book, 'firstname').then(console.log)
 // [
 //  { path: 'author.firstname', data: { value: 'Dianne' } },
 //  { path: 'editor.firstname', data: { value: 'Felicity' } }
 // ]
 
-console.log(hays.find(book, 'title', { transform: s => s.toLowerCase() }))
+hays.find(book, /.*name/).then(console.log)
+// [
+//   { path: 'author.lastname', data: { value: 'Windler' } },
+//   { path: 'author.firstname', data: { value: 'Dianne' } },
+//   { path: 'editor.lastname', data: { value: 'Smith' } },
+//   { path: 'editor.firstname', data: { value: 'Felicity' } }
+// ]
+
+hays.find(book, 'title', { transform: s => s.toLowerCase() }).then(console.log)
 // [
 //   {
 //     path: 'title',
@@ -42,7 +50,7 @@ console.log(hays.find(book, 'title', { transform: s => s.toLowerCase() }))
 //   }
 // ]
 
-console.log(hays.replace(book, 'category', c => c.concat('Educational')))
+hays.replace(book, 'category', c => c.concat('Educational')).then(console.log)
 // [
 //   {
 //     path: 'category',

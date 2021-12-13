@@ -1,4 +1,4 @@
-async function find(object, key, opts) {
+async function find(object, keyPattern, opts) {
   let result = []
 
   for (const k in object) {
@@ -6,7 +6,12 @@ async function find(object, key, opts) {
       continue
     }
 
-    if (k == key) {
+    let matched = false
+    if (keyPattern instanceof RegExp) {
+      matched = keyPattern.test(k)
+    } else matched = k == keyPattern
+
+    if (matched) {
       const temp = { path: k, data: { value: object[k] } }
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
@@ -27,7 +32,7 @@ async function find(object, key, opts) {
     }
 
     if (object[k] && typeof object[k] == 'object') {
-      let sub = find(object[k], key, opts)
+      let sub = find(object[k], keyPattern, opts)
       if (sub instanceof Promise) sub = await sub
       result = result.concat(
         sub.map(s => ({ path: k + '.' + s.path, data: s.data }))
@@ -38,13 +43,18 @@ async function find(object, key, opts) {
   return result
 }
 
-async function findOne(object, key, opts) {
+async function findOne(object, keyPattern, opts) {
   for (const k in object) {
     if (!object.hasOwnProperty(k)) {
       continue
     }
 
-    if (k == key) {
+    let matched = false
+    if (keyPattern instanceof RegExp) {
+      matched = keyPattern.test(k)
+    } else matched = k == keyPattern
+
+    if (matched) {
       const temp = { path: k, data: { value: object[k] } }
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
@@ -65,7 +75,7 @@ async function findOne(object, key, opts) {
     }
 
     if (object[k] && typeof object[k] == 'object') {
-      let sub = findOne(object[k], key, opts)
+      let sub = findOne(object[k], keyPattern, opts)
       if (sub instanceof Promise) sub = await sub
       if (sub) return { path: k + '.' + sub.path, data: sub.data }
     }
@@ -74,12 +84,12 @@ async function findOne(object, key, opts) {
   return null
 }
 
-function replace(object, key, func) {
-  return find(object, key, { replace: func })
+function replace(object, keyPattern, func) {
+  return find(object, keyPattern, { replace: func })
 }
 
-function replaceOne(object, key, func) {
-  return findOne(object, key, { replace: func })
+function replaceOne(object, keyPattern, func) {
+  return findOne(object, keyPattern, { replace: func })
 }
 
 module.exports = { find, findOne, replace, replaceOne }
