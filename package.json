@@ -1,10 +1,27 @@
 {
   "name": "hays",
-  "version": "0.3.0",
-  "main":"./hays.js",
-  "repository": {
-    "type":"git",
-    "url":"git+https://github.com/massivefermion/hays"
+  "author": {
+    "name": "massivefermion",
+    "email": "massivefermion@protonmail.com"
   },
-  "keywords": ["object","deep","deeply","nested","path","find","excavate","explore","key","field","value"]
+  "version": "0.4.0",
+  "main": "./hays.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/massivefermion/hays"
+  },
+  "types": "hays.d.ts",
+  "keywords": [
+    "object",
+    "deep",
+    "deeply",
+    "nested",
+    "path",
+    "find",
+    "excavate",
+    "explore",
+    "key",
+    "field",
+    "value"
+  ]
 }
