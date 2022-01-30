@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist",
+    "target": "ES6",
+    "rootDir": "src"
+  },
+  "exclude": [
+    "dist"
+  ]
+}

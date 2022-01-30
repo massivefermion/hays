@@ -4,13 +4,19 @@
     "name": "massivefermion",
     "email": "massivefermion@protonmail.com"
   },
-  "version": "0.4.0",
-  "main": "./hays.js",
+  "version": "0.5.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/massivefermion/hays"
   },
-  "types": "hays.d.ts",
+  "types": "./dist/hays.d.ts",
+  "exports": {
+    "require": "./dist/cjs/hays.js",
+    "import": "./dist/esm/hays.js"
+  },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "object",
     "deep",
@@ -23,5 +29,16 @@
     "key",
     "field",
     "value"
-  ]
+  ],
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
+    "rollup": "^2.66.1",
+    "typescript": "^4.5.5"
+  },
+  "scripts": {
+    "prebuild": "rm -rfd dist",
+    "build": "rollup -c",
+    "postbuild": "tsc && rm src/hays.js",
+    "prepublish": "npm run build"
+  }
 }

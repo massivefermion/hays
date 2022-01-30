@@ -1,4 +1,13 @@
-async function find(object, keyPattern, opts) {
+export async function find(
+  object: any,
+  keyPattern: string | RegExp,
+  opts?: { transform?: Function; replace?: Function }
+): Promise<
+  {
+    path: string
+    data: { value?: any; transformed?: any; old?: any; new?: any }
+  }[]
+> {
   let result = []
 
   for (const k in object) {
@@ -12,7 +21,7 @@ async function find(object, keyPattern, opts) {
     } else matched = k == keyPattern
 
     if (matched) {
-      const temp = { path: k, data: { value: object[k] } }
+      const temp: any = { path: k, data: { value: object[k] } }
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
           temp.data.transformed = opts.transform(object[k])
@@ -32,8 +41,7 @@ async function find(object, keyPattern, opts) {
     }
 
     if (object[k] && typeof object[k] == 'object') {
-      let sub = find(object[k], keyPattern, opts)
-      if (sub instanceof Promise) sub = await sub
+      let sub = await find(object[k], keyPattern, opts)
       result = result.concat(
         sub.map(s => ({ path: k + '.' + s.path, data: s.data }))
       )
@@ -43,7 +51,14 @@ async function find(object, keyPattern, opts) {
   return result
 }
 
-async function findOne(object, keyPattern, opts) {
+export async function findOne(
+  object: any,
+  keyPattern: string | RegExp,
+  opts?: { transform?: Function; replace?: Function }
+): Promise<{
+  path: string
+  data: { value?: any; transformed?: any; old?: any; new?: any }
+} | null> {
   for (const k in object) {
     if (!object.hasOwnProperty(k)) {
       continue
@@ -55,7 +70,7 @@ async function findOne(object, keyPattern, opts) {
     } else matched = k == keyPattern
 
     if (matched) {
-      const temp = { path: k, data: { value: object[k] } }
+      const temp: any = { path: k, data: { value: object[k] } }
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
           temp.data.transformed = opts.transform(object[k])
@@ -75,8 +90,7 @@ async function findOne(object, keyPattern, opts) {
     }
 
     if (object[k] && typeof object[k] == 'object') {
-      let sub = findOne(object[k], keyPattern, opts)
-      if (sub instanceof Promise) sub = await sub
+      let sub = await findOne(object[k], keyPattern, opts)
       if (sub) return { path: k + '.' + sub.path, data: sub.data }
     }
   }
@@ -84,12 +98,10 @@ async function findOne(object, keyPattern, opts) {
   return null
 }
 
-function replace(object, keyPattern, func) {
+export function replace(object, keyPattern, func) {
   return find(object, keyPattern, { replace: func })
 }
 
-function replaceOne(object, keyPattern, func) {
+export function replaceOne(object, keyPattern, func) {
   return findOne(object, keyPattern, { replace: func })
 }
-
-module.exports = { find, findOne, replace, replaceOne }
