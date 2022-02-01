@@ -24,15 +24,11 @@ export async function find(
       const temp: any = { path: k, data: { value: object[k] } }
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
-          temp.data.transformed = opts.transform(object[k])
-          if (temp.data.transformed instanceof Promise)
-            temp.data.transformed = await temp.data.transformed
+          temp.data.transformed = await opts.transform(object[k])
         }
         if (opts.replace && typeof opts.replace == 'function') {
           temp.data.old = object[k]
-          object[k] = opts.replace(object[k])
-          if (object[k] instanceof Promise)
-            object[k] = await opts.replace(object[k])
+          object[k] = await opts.replace(object[k])
           temp.data.new = object[k]
           delete temp.data.value
         }
@@ -73,15 +69,11 @@ export async function findOne(
       const temp: any = { path: k, data: { value: object[k] } }
       if (object[k] && opts) {
         if (opts.transform && typeof opts.transform == 'function') {
-          temp.data.transformed = opts.transform(object[k])
-          if (temp.data.transformed instanceof Promise)
-            temp.data.transformed = await temp.data.transformed
+          temp.data.transformed = await opts.transform(object[k])
         }
         if (opts.replace && typeof opts.replace == 'function') {
           temp.data.old = object[k]
-          object[k] = opts.replace(object[k])
-          if (object[k] instanceof Promise)
-            object[k] = await opts.replace(object[k])
+          object[k] = await opts.replace(object[k])
           temp.data.new = object[k]
           delete temp.data.value
         }
