@@ -1,6 +1,6 @@
 # hays
 
-hays finds, transforms and replaces keys with a specific name deeply nested inside an object.
+find the dot path and value of a key of a specific name or pattern deep inside an object and transform or replace it.
 
 ## Install
 
